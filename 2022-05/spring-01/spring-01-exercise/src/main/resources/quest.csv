@@ -1,7 +1,6 @@
-ID,OTVET,QUEST
-1,yes,Do you have many friends?
-2,Lena,Who is your best friend? What is his/her name?
-3,Summer,When and where do you make friends?
-4,yes,Do you like to make new friends?
-5,find,Is it easier to find or to lose a good friend?
-6,yes,Friendship helps people to be more cheerful and self-confident", doesn’t it?
+ID,QUEST,RESPONSE
+1,How many squares are there on the chessboard?,64
+2,How many times is a digit used in writing two-digit numbers?,19
+3,How many legs does a snail have?,1
+4,How many leaves does a lily of the valley have?,2
+5,How many eyes does a fly have?,5

@@ -7,12 +7,15 @@ import lombok.Data;
 public class Quests {
     public String id;
     public String quest;
-    public String otvet;
+    public String response;
 
-    public Quests(String id, String quest, String otvet) {
+
+
+
+    public Quests(String id, String quest, String response) {
         this.id=id;
         this.quest=quest;
-        this.otvet=otvet;
+        this.response = response;
     }
 
     public Quests() {

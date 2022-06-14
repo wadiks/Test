@@ -9,8 +9,14 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import ru.otus.spring.dao.QuestsDao;
 import ru.otus.spring.domain.Quests;
+import ru.otus.spring.service.QuestsService;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,11 +24,53 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@Configuration
+@ComponentScan
 public class TestLoad {
     private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest.csv";
 
+    public List<Quests> quests;
+
+    @BeforeEach
+    void loadSpring(){
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestLoad.class);
+        QuestsDao service = context.getBean(QuestsDao.class);
+        quests = service.loadQuest();
+    }
+
+    @Test
+    void testSpring(){
+      assertNotNull(quests);
+    }
+
     @Test
     void saveToFile() {
+        /**Возможные вопрсы
+         *             1.    Сколько квадратов на шахматной доске? (64 квадрата)
+         *             2.    Сколько раз в записи двузначных чисел используется цифра «3»? (19 раз)
+         *             3.    Сколько ног у улитки? (одна)
+         *             4.    Сколько продолжался полет Гагарина (1 ч 48 мин)
+         *             5.    Сколько листьев у ландыша (2)
+         *             6.    Сколько глаз у мухи (5)
+         *             7.    Сколько музыкантов в квинтете? (5)
+         *             8.    Сколько холодных цветов в радуге? (3, зеленый – нейтральный цвет)
+         *             9.    Сколько звуков в слове «рассеянный»? (9)
+         *             10.    Сколько основных органов чувств у человека? (5)
+         */
+        /**Possible questions
+         * 1. How many squares are there on the chessboard? (64 squares)
+         * 2. How many times is the digit "3" used in writing two-digit numbers? (19 times)
+         * 3. How many legs does a snail have? (one)
+         * 4. How long did Gagarin's flight last (1 h 48 min)
+         * 5. How many leaves does a lily of the valley have (2)
+         * 6. How many eyes does a fly have (5)
+         * 7. How many musicians are in the quintet? (5)
+         * 8. How many cold colors are there in the rainbow? (3, green is a neutral color)
+         * 9. How many sounds are there in the word "scattered"? (9)
+         * 10. How many basic sense organs does a person have? (5)
+         */
 
         try (Writer writer = Files.newBufferedWriter(Paths.get(STRING_ARRAY_SAMPLE));
         ) {
@@ -30,12 +78,12 @@ public class TestLoad {
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .build();
             List<Quests> myUsers = new ArrayList<>();
-            myUsers.add(new Quests("1", "Do you have many friends?", "yes"));
-            myUsers.add(new Quests("2", "Who is your best friend? What is his/her name?", "Lena"));
-            myUsers.add(new Quests("3", "When and where do you make friends?", "Summer"));
-            myUsers.add(new Quests("4", "Do you like to make new friends?", "yes"));
-            myUsers.add(new Quests("5", "Is it easier to find or to lose a good friend?", "find"));
-            myUsers.add(new Quests("6", "Friendship helps people to be more cheerful and self-confident, doesn’t it?", "yes"));
+            myUsers.add(new Quests("1", "How many squares are there on the chessboard?", "64"));
+            myUsers.add(new Quests("2", "How many times is a digit used in writing two-digit numbers?", "19"));
+            myUsers.add(new Quests("3", "How many legs does a snail have?", "1"));
+            myUsers.add(new Quests("4", "How many leaves does a lily of the valley have?", "2"));
+            myUsers.add(new Quests("5", "How many eyes does a fly have?", "5"));
+            myUsers.add(new Quests("6", "How many basic sense organs does a person have?","5"));
             beanToCsv.write(myUsers);
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
@@ -52,7 +100,7 @@ public class TestLoad {
             for (CSVRecord record : parser) {
                 Quests emp = new Quests();
                 emp.setId(record.get("ID"));
-                emp.setOtvet(record.get("OTVET"));
+                emp.setResponse(record.get("RESPONSE"));
                 emp.setQuest(record.get("QUEST"));
                 emps.add(emp);
             }
