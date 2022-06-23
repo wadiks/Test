@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestsDaoSimple implements QuestsDao {
+    String resourse;
     public List<Quests> loadQuest() {
       return new LoadCSV().loadQuestResource();
     }

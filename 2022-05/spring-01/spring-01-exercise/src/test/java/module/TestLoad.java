@@ -11,9 +11,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
 import ru.otus.spring.dao.QuestsDao;
 import ru.otus.spring.domain.Quests;
 import ru.otus.spring.service.QuestsService;
@@ -25,13 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+@PropertySource("classpath:application.properties")
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = "ru.otus.spring.config")
 public class TestLoad {
     private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest.csv";
 
     public List<Quests> quests;
+
+    @Value("${file.url}")
+    String resourse;
 
     @BeforeEach
     void loadSpring(){
@@ -107,6 +109,11 @@ public class TestLoad {
             parser.close();
             assertNotNull(emps);
         }
+    }
+
+    @Test
+    void res(){
+        System.out.println("resourse = " + resourse);
     }
 }
 

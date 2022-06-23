@@ -1,8 +1,7 @@
 package ru.otus.spring;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import ru.otus.spring.domain.Quests;
 import ru.otus.spring.service.QuestsService;
 
@@ -14,6 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ComponentScan
 public class Main {
 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+        return  new PropertySourcesPlaceholderConfigurer();
+    }
     public static String familyName = "";
 
     public static void main(String[] args) {
