@@ -1,9 +1,8 @@
 package ru.otus.spring.dao;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import ru.otus.spring.domain.Quests;
 
 import java.io.IOException;
@@ -13,11 +12,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestsDaoSimple implements QuestsDao {
-    public List<Quests> loadQuest() {
-      return new LoadCSV().loadQuestResource();
-    }
-  /*  public List<Quests> loadQuestResource()  {
+public class LoadCSV {
+    public List<Quests> loadQuestResource()  {
         try (final InputStream is = getClass().getResourceAsStream("/quest.csv"))
         {
             CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
@@ -37,6 +33,4 @@ public class QuestsDaoSimple implements QuestsDao {
             throw new RuntimeException(e);
         }
     }
-
-   */
 }

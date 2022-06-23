@@ -105,7 +105,7 @@ public class TestLoad {
                 emps.add(emp);
             }
             parser.close();
-            System.out.println(emps);
+            assertNotNull(emps);
         }
     }
 }
