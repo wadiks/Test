@@ -9,7 +9,6 @@ import ru.otus.spring.service.QuestsServiceImpl;
 @Configuration
 public class QuestServiceConfig {
 
-    @Bean
     public QuestsService  QuestsService ( QuestsDao dao) { return new QuestsServiceImpl(dao);
     }
 }

@@ -1,9 +1,12 @@
 package ru.otus.spring.dao;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.domain.Quests;
 
 import java.io.IOException;
@@ -13,31 +16,20 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+
 public class QuestsDaoSimple implements QuestsDao {
-    String resourse;
-    public List<Quests> loadQuest() {
-      return new LoadCSV().loadQuestResource();
-    }
-  /*  public List<Quests> loadQuestResource()  {
-        try (final InputStream is = getClass().getResourceAsStream("/quest.csv"))
-        {
-            CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
-            Reader targetReader = new InputStreamReader(is);
-            CSVParser parser = new CSVParser(targetReader, format);
-            List emps = new ArrayList();
-            for (CSVRecord record : parser) {
-                Quests emp = new Quests();
-                emp.setId(record.get("ID"));
-                emp.setResponse(record.get("RESPONSE"));
-                emp.setQuest(record.get("QUEST"));
-                emps.add(emp);
-            }
-            parser.close();
-            return emps;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+    private final Resourse res;
+
+    public QuestsDaoSimple(Resourse res) {
+
+        this.res = res;
     }
 
-   */
+    public List<Quests> loadQuest() {
+
+        return res.loadQuestResource();
+    }
+
 }
