@@ -1,4 +1,4 @@
-package module;
+package ru.otus.spring;
 
 
 import com.opencsv.CSVWriter;
@@ -12,10 +12,16 @@ import org.apache.commons.csv.CSVRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import ru.otus.spring.Main;
 import ru.otus.spring.dao.QuestsDao;
 import ru.otus.spring.domain.Quests;
 import ru.otus.spring.service.QuestsService;
+import ru.otus.spring.starter.ApplicationContextHolder;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,28 +30,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-@PropertySource("classpath:application.properties")
-@Configuration
-@ComponentScan(basePackages = "ru.otus.spring.config")
+
+@SpringBootTest
 public class TestLoad {
     private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest.csv";
 
     public List<Quests> quests;
 
-    @Value("${file.url}")
-    String resourse;
+    private ApplicationContext ctx;
 
     @BeforeEach
     void loadSpring(){
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestLoad.class);
-        QuestsDao service = context.getBean(QuestsDao.class);
-        quests = service.loadQuest();
+        ctx = ApplicationContextHolder.getApplicationContext();
+        QuestsService service =  ctx.getBean(QuestsService.class);
+        quests = service.getQuest();
     }
 
     @Test
-    void testSpring(){
-      assertNotNull(quests);
+    void contextLoads() {
     }
+
+    @Test
+    void testQuests(){
+        assertNotNull(quests);
+    }
+
 
     @Test
     void saveToFile() {
@@ -109,11 +118,6 @@ public class TestLoad {
             parser.close();
             assertNotNull(emps);
         }
-    }
-
-    @Test
-    void res(){
-        System.out.println("resourse = " + resourse);
     }
 }
 
