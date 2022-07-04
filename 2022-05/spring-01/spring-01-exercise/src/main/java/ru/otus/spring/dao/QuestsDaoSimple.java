@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-
 public class QuestsDaoSimple implements QuestsDao {
 
     private final Resourse res;

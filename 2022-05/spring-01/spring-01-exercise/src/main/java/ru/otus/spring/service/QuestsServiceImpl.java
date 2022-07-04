@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class QuestsServiceImpl implements QuestsService {
 
-    public static String FAMILY_NAME = "";
     private final QuestsDao dao;
 
     public QuestsServiceImpl(QuestsDao dao) {
@@ -24,12 +23,10 @@ public class QuestsServiceImpl implements QuestsService {
     }
 
 
-    public void checkUser(List<Quests> quests) {
+    public void checkUser(List<Quests> quests,String userName) {
         Scanner in = new Scanner(System.in);
         AtomicInteger rezTest = new AtomicInteger();
-        System.out.println("Введите Фамилию и Имя");
-        FAMILY_NAME = in.next();
-        System.out.println(String.format("%s проидете тестирование", FAMILY_NAME));
+        System.out.println(String.format("%s проидете тестирование", userName));
         quests.forEach(i -> {
             System.out.println(String.format("вопрос номен %s = %s", i.id, i.quest));
             System.out.println("Введите Ваш ответ цифрами");
@@ -37,6 +34,6 @@ public class QuestsServiceImpl implements QuestsService {
                 rezTest.incrementAndGet();
             }
         });
-        System.out.println(String.format("%s Ваш результат = %s  из %s ", FAMILY_NAME, rezTest, quests.size()));
+        System.out.println(String.format("%s Ваш результат = %s  из %s ", userName, rezTest, quests.size()));
     }
 }

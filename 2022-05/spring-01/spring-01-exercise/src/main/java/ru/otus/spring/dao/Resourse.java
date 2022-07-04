@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface Resourse {
     List<Quests> loadQuestResource();
-
     List<Quests> parseResource(Reader rd) throws IOException;
 
 }

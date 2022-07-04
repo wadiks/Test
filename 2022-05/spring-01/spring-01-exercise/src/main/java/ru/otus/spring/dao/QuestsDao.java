@@ -8,6 +8,4 @@ public interface QuestsDao {
 
     List<Quests> loadQuest();
 
-
-
 }

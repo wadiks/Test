@@ -11,5 +11,5 @@ public interface QuestsService {
 
     List<Quests> getQuest();
 
-    public void checkUser(List<Quests> quests);
+    public void checkUser(List<Quests> quests,String userName);
 }
