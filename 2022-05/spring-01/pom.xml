@@ -12,6 +12,5 @@
 
     <modules>
         <module>spring-01-exercise</module>
-        <module>spring-01-solution</module>
     </modules>
 </project>
