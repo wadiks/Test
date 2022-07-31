@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface QuestsDao {
 
-    List<Quests> loadQuest();
-
-
+    List<Quests> loadQuest(String fileName);
 
 }

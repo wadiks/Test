@@ -7,7 +7,7 @@ import java.io.Reader;
 import java.util.List;
 
 public interface Resourse {
-    List<Quests> loadQuestResource();
+    List<Quests> loadQuestResource(String fileName);
 
     List<Quests> parseResource(Reader rd) throws IOException;
 

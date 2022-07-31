@@ -16,8 +16,8 @@ import java.util.List;
 @Component
 public class LoadCSV implements Resourse {
 
-    public List<Quests> loadQuestResource() {
-        try (final InputStream is = getClass().getResourceAsStream("/quest.csv")) {
+    public List<Quests> loadQuestResource(String fileName) {
+        try (final InputStream is = getClass().getResourceAsStream(fileName)) {
             Reader targetReader = new InputStreamReader(is);
             return parseResource(targetReader);
         } catch (IOException e) {

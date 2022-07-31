@@ -27,9 +27,9 @@ public class QuestsDaoSimple implements QuestsDao {
         this.res = res;
     }
 
-    public List<Quests> loadQuest() {
+    public List<Quests> loadQuest(String fileName) {
 
-        return res.loadQuestResource();
+        return res.loadQuestResource(fileName);
     }
 
 }

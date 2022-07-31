@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+
+file:
+  name:
+    en: /quest-en.csv
+    ru: /quest-ru.csv
+
+
+logging:
+  level:
+    root: error
+#spring:profiles:active: test

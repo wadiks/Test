@@ -20,6 +20,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import ru.otus.spring.Main;
 import ru.otus.spring.dao.QuestsDao;
 import ru.otus.spring.domain.Quests;
+import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.QuestsService;
 import ru.otus.spring.starter.ApplicationContextHolder;
 
@@ -33,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class TestLoad {
-    private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest.csv";
+    private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest-en.csv";
 
     public List<Quests> quests;
 
@@ -43,7 +44,8 @@ public class TestLoad {
     void loadSpring(){
         ctx = ApplicationContextHolder.getApplicationContext();
         QuestsService service =  ctx.getBean(QuestsService.class);
-        quests = service.getQuest();
+        MessageService mService =  ctx.getBean(MessageService.class);
+        quests = service.getQuest(mService.getQuestionsFileName());
     }
 
     @Test
