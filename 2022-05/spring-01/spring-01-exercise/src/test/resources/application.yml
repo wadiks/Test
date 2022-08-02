@@ -7,7 +7,6 @@ file:
     en: /quest-en.csv
     ru: /quest-ru.csv
 
-
 logging:
   level:
     root: error

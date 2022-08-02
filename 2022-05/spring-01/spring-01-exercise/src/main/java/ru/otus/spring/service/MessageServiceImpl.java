@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import java.util.Properties;
 public class MessageServiceImpl implements MessageService {
 
     private Locale locale;
-    private MessageSource messageSource;
 
     @Value("${file.name.en}")
     private String fileNameEN;
@@ -26,11 +25,6 @@ public class MessageServiceImpl implements MessageService {
     private String fileNameRu;
 
 
-    @Autowired
-    public MessageServiceImpl(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
     @Override
     public String getQuestionsFileName() {
         return locale == Locale.ENGLISH ? fileNameEN : fileNameRu;
@@ -38,25 +32,22 @@ public class MessageServiceImpl implements MessageService {
 
 
     public HashMap<String, String> readMessage() {
-        Properties prop = new Properties();
-        try {
-            if (locale == Locale.ENGLISH)
-                prop.load(MessageServiceImpl.class.getClassLoader().getResourceAsStream("messages_en.properties"));
-            prop.load(new InputStreamReader(MessageServiceImpl.class.getClassLoader().getResourceAsStream("messages_ru.properties"), "UTF-8"));
+        HashMap<String, String> message = new HashMap<>();
+        message.put("enter.fio", messageSource().getMessage("enter.fio", new Object[]{}, locale));
+        message.put("enter.test", messageSource().getMessage("enter.test", new Object[]{}, locale));
+        message.put("cli.question", messageSource().getMessage("cli.question", new Object[]{}, locale));
+        message.put("cli.response", messageSource().getMessage("cli.response", new Object[]{}, locale));
+        message.put("response.result", messageSource().getMessage("response.result", new Object[]{}, locale));
+        message.put("response.iz", messageSource().getMessage("response.iz", new Object[]{}, locale));
+        return message;
+    }
 
-            HashMap<String, String> message = new HashMap<>();
-            message.put("enter.fio", prop.getProperty("enter.fio"));
-            message.put("enter.test", prop.getProperty("enter.test"));
-            message.put("cli.question", prop.getProperty("cli.question"));
-            message.put("cli.response", prop.getProperty("cli.response"));
-            message.put("response.result", prop.getProperty("response.result"));
-            message.put("response.iz", prop.getProperty("response.iz"));
-
-            return message;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+        if (locale == Locale.ENGLISH) ms.setBasename("classpath:messages_en");
+        ms.setBasename("classpath:messages_ru");
+        ms.setDefaultEncoding("windows-1251");
+        return ms;
     }
 
 

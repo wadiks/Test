@@ -9,20 +9,18 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import ru.otus.spring.Main;
-import ru.otus.spring.dao.QuestsDao;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import ru.otus.spring.domain.Quests;
 import ru.otus.spring.service.MessageService;
+import ru.otus.spring.service.MessageServiceImpl;
 import ru.otus.spring.service.QuestsService;
-import ru.otus.spring.starter.ApplicationContextHolder;
+import ru.otus.spring.service.QuestsServiceImpl;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -30,35 +28,49 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+@SpringBootTest()
+@TestPropertySource(locations = "classpath:application.yml")
+@DirtiesContext()
+@Import(MessageServiceImpl.class)
+
 public class TestLoad {
     private static final String STRING_ARRAY_SAMPLE = "src/main/resources/quest-en.csv";
 
-    public List<Quests> quests;
+    @Autowired
+    private QuestsService questsService;
 
-    private ApplicationContext ctx;
+    @Autowired
+    private QuestsServiceImpl questsServiceImpl;
 
-    @BeforeEach
-    void loadSpring(){
-        ctx = ApplicationContextHolder.getApplicationContext();
-        QuestsService service =  ctx.getBean(QuestsService.class);
-        MessageService mService =  ctx.getBean(MessageService.class);
-        quests = service.getQuest(mService.getQuestionsFileName());
-    }
+    @Autowired
+    private MessageService messageService;
+
 
     @Test
-    void contextLoads() {
-    }
-
-    @Test
-    void testQuests(){
+    @DisplayName("Загрузка тестов ")
+    void testQuests() {
+        List<Quests> quests;
+        quests = questsService.getQuest(messageService.getQuestionsFileName());
         assertNotNull(quests);
     }
 
+    @Test
+    @DisplayName("Тестирование студента")
+    void testStudent() {
+        String input = " Иван 64 19 1 2 5 5";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+        final var rez = questsServiceImpl.checkUser(questsService.getQuest(messageService.getQuestionsFileName()), messageService.readMessage()).intValue();
+        assertEquals(6,rez );
+    }
+
+
 
     @Test
+    @DisplayName("Добавление вопросов в файл")
     void saveToFile() {
         /**Возможные вопрсы
          *             1.    Сколько квадратов на шахматной доске? (64 квадрата)
@@ -70,7 +82,7 @@ public class TestLoad {
          *             7.    Сколько музыкантов в квинтете? (5)
          *             8.    Сколько холодных цветов в радуге? (3, зеленый – нейтральный цвет)
          *             9.    Сколько звуков в слове «рассеянный»? (9)
-         *             10.    Сколько основных органов чувств у человека? (5)
+         *             10.   Сколько основных органов чувств у человека? (5)
          */
         /**Possible questions
          * 1. How many squares are there on the chessboard? (64 squares)
@@ -96,13 +108,13 @@ public class TestLoad {
             myUsers.add(new Quests("3", "How many legs does a snail have?", "1"));
             myUsers.add(new Quests("4", "How many leaves does a lily of the valley have?", "2"));
             myUsers.add(new Quests("5", "How many eyes does a fly have?", "5"));
-            myUsers.add(new Quests("6", "How many basic sense organs does a person have?","5"));
+            myUsers.add(new Quests("6", "How many basic sense organs does a person have?", "5"));
             beanToCsv.write(myUsers);
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
         }
     }
-
+    @DisplayName("Чтение и парсинг файла")
     @Test
     void readFile() throws IOException {
         try (final InputStream is = getClass().getResourceAsStream("/quest.csv")) {

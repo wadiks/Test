@@ -24,7 +24,7 @@ public class QuestsServiceImpl implements QuestsService {
         return dao.loadQuest(fileName);
     }
 
-    public void checkUser(List<Quests> quests, HashMap<String, String> message) {
+    public AtomicInteger checkUser(List<Quests> quests, HashMap<String, String> message) {
         Scanner in = new Scanner(System.in);
         AtomicInteger rezTest = new AtomicInteger();
         System.out.println(message.get("enter.fio"));
@@ -39,5 +39,6 @@ public class QuestsServiceImpl implements QuestsService {
         });
         System.out.println(String.format("%s " + message.get("response.result") + " = %s " + message.get("response.iz")
                 + " %s ", FAMILY_NAME, rezTest, quests.size()));
+        return rezTest;
     }
 }

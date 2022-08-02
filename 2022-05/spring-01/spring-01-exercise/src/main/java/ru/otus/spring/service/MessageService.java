@@ -5,6 +5,5 @@ import java.util.Locale;
 
 public interface MessageService {
     String getQuestionsFileName();
-
     HashMap<String,String> readMessage();
 }

@@ -1,5 +1,6 @@
 package ru.otus.spring.starter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
@@ -16,13 +17,17 @@ import java.util.Locale;
 @Profile("!test")
 public class RunAfterStartup {
 
-    private ApplicationContext ctx;
+    MessageService messageService;
+    QuestsService questsService;
 
-    @EventListener(ApplicationReadyEvent.class)
+    @Autowired
+    public RunAfterStartup(MessageService messageService, QuestsService questsService) {
+        this.messageService = messageService;
+        this.questsService = questsService;
+    }
+
+   @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() {
-        ctx = ApplicationContextHolder.getApplicationContext();
-        MessageService mService = ctx.getBean(MessageService.class);
-        QuestsService service = ctx.getBean(QuestsService.class);
-        service.checkUser(service.getQuest(mService.getQuestionsFileName()), mService.readMessage());
+     questsService.checkUser(questsService.getQuest(messageService.getQuestionsFileName()), messageService.readMessage());
     }
 }
